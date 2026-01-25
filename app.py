@@ -14,7 +14,6 @@ try:
     MATPLOTLIB_AVAILABLE = True
 except ImportError:
     MATPLOTLIB_AVAILABLE = False
-    st.warning("⚠️ Matplotlib not available. Using fallback visualizations.")
 
 from src.scorer import FraudScorer
 from src.explainability import generate_explanation, format_explanation_text
@@ -403,6 +402,9 @@ with tab3:
 with tab4:
     st.markdown("## Risk Analytics Dashboard")
     
+    if not MATPLOTLIB_AVAILABLE:
+        st.info("ℹ️ Using lightweight fallback visualizations (matplotlib not available)")
+    
     # Load data for analytics
     try:
         df_analytics = load_sample_data()
@@ -457,10 +459,12 @@ with tab4:
             ax.grid(True, alpha=0.3)
             st.pyplot(fig)
         else:
-            hist_data = pd.DataFrame({
-                'Fraud Score': df_analytics['fraud_score']
-            })
-            st.bar_chart(hist_data, use_container_width=True)
+            bins = np.histogram(df_analytics['fraud_score'], bins=30)
+            hist_df = pd.DataFrame({
+                'Score Range': bins[1][:-1],
+                'Count': bins[0]
+            }).set_index('Score Range')
+            st.area_chart(hist_df, use_container_width=True)
             st.caption("Thresholds: Low/Medium=30, Medium/High=60")
         
         st.markdown("### Top Risky Merchant Categories")
