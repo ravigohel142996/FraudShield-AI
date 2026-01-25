@@ -38,7 +38,7 @@ if 'simulator' not in st.session_state:
 
 # Sidebar
 with st.sidebar:
-    st.image("https://via.placeholder.com/200x60/667eea/ffffff?text=FraudShield+AI", use_container_width=True)
+    st.image("https://via.placeholder.com/200x60/667eea/ffffff?text=FraudShield+AI", width=200)
     st.markdown("### Transaction Fraud Risk Engine")
     st.markdown("---")
     
