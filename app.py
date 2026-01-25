@@ -6,9 +6,15 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from datetime import datetime
-import matplotlib.pyplot as plt
-import seaborn as sns
 from io import BytesIO
+
+try:
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    MATPLOTLIB_AVAILABLE = True
+except ImportError:
+    MATPLOTLIB_AVAILABLE = False
+    st.warning("⚠️ Matplotlib not available. Using fallback visualizations.")
 
 from src.scorer import FraudScorer
 from src.explainability import generate_explanation, format_explanation_text
@@ -439,53 +445,65 @@ with tab4:
     col_left, col_right = st.columns(2)
     
     with col_left:
-        # Risk distribution
         st.markdown("### Risk Score Distribution")
-        fig, ax = plt.subplots(figsize=(8, 5))
-        ax.hist(df_analytics['fraud_score'], bins=30, color='#667eea', alpha=0.7, edgecolor='black')
-        ax.axvline(30, color='green', linestyle='--', label='Low/Medium threshold')
-        ax.axvline(60, color='red', linestyle='--', label='Medium/High threshold')
-        ax.set_xlabel('Fraud Risk Score')
-        ax.set_ylabel('Number of Transactions')
-        ax.legend()
-        ax.grid(True, alpha=0.3)
-        st.pyplot(fig)
+        if MATPLOTLIB_AVAILABLE:
+            fig, ax = plt.subplots(figsize=(8, 5))
+            ax.hist(df_analytics['fraud_score'], bins=30, color='#667eea', alpha=0.7, edgecolor='black')
+            ax.axvline(30, color='green', linestyle='--', label='Low/Medium threshold')
+            ax.axvline(60, color='red', linestyle='--', label='Medium/High threshold')
+            ax.set_xlabel('Fraud Risk Score')
+            ax.set_ylabel('Number of Transactions')
+            ax.legend()
+            ax.grid(True, alpha=0.3)
+            st.pyplot(fig)
+        else:
+            hist_data = pd.DataFrame({
+                'Fraud Score': df_analytics['fraud_score']
+            })
+            st.bar_chart(hist_data, use_container_width=True)
+            st.caption("Thresholds: Low/Medium=30, Medium/High=60")
         
-        # Top risky merchant categories
         st.markdown("### Top Risky Merchant Categories")
         merchant_risk = df_analytics.groupby('merchant_category')['fraud_score'].mean().sort_values(ascending=False).head(8)
-        fig, ax = plt.subplots(figsize=(8, 5))
-        merchant_risk.plot(kind='barh', ax=ax, color='#f59e0b')
-        ax.set_xlabel('Average Fraud Score')
-        ax.set_ylabel('Merchant Category')
-        ax.grid(True, alpha=0.3, axis='x')
-        st.pyplot(fig)
+        if MATPLOTLIB_AVAILABLE:
+            fig, ax = plt.subplots(figsize=(8, 5))
+            merchant_risk.plot(kind='barh', ax=ax, color='#f59e0b')
+            ax.set_xlabel('Average Fraud Score')
+            ax.set_ylabel('Merchant Category')
+            ax.grid(True, alpha=0.3, axis='x')
+            st.pyplot(fig)
+        else:
+            st.bar_chart(merchant_risk, use_container_width=True)
     
     with col_right:
-        # High-risk transactions by city
         st.markdown("### High-Risk Transactions by City")
         city_high_risk = df_analytics[df_analytics['fraud_score'] >= 60].groupby('ip_city').size().sort_values(ascending=False).head(10)
-        fig, ax = plt.subplots(figsize=(8, 5))
-        city_high_risk.plot(kind='bar', ax=ax, color='#ef4444')
-        ax.set_xlabel('City')
-        ax.set_ylabel('High-Risk Transaction Count')
-        ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right')
-        ax.grid(True, alpha=0.3, axis='y')
-        plt.tight_layout()
-        st.pyplot(fig)
+        if MATPLOTLIB_AVAILABLE:
+            fig, ax = plt.subplots(figsize=(8, 5))
+            city_high_risk.plot(kind='bar', ax=ax, color='#ef4444')
+            ax.set_xlabel('City')
+            ax.set_ylabel('High-Risk Transaction Count')
+            ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right')
+            ax.grid(True, alpha=0.3, axis='y')
+            plt.tight_layout()
+            st.pyplot(fig)
+        else:
+            st.bar_chart(city_high_risk, use_container_width=True)
         
-        # Risk by hour of day
         st.markdown("### Risk Score by Hour of Day")
         if 'hour_of_day' in df_analytics.columns:
             hourly_risk = df_analytics.groupby('hour_of_day')['fraud_score'].mean()
-            fig, ax = plt.subplots(figsize=(8, 5))
-            ax.plot(hourly_risk.index, hourly_risk.values, marker='o', linewidth=2, color='#667eea')
-            ax.fill_between(hourly_risk.index, hourly_risk.values, alpha=0.3, color='#667eea')
-            ax.set_xlabel('Hour of Day')
-            ax.set_ylabel('Average Fraud Score')
-            ax.set_xticks(range(0, 24, 2))
-            ax.grid(True, alpha=0.3)
-            st.pyplot(fig)
+            if MATPLOTLIB_AVAILABLE:
+                fig, ax = plt.subplots(figsize=(8, 5))
+                ax.plot(hourly_risk.index, hourly_risk.values, marker='o', linewidth=2, color='#667eea')
+                ax.fill_between(hourly_risk.index, hourly_risk.values, alpha=0.3, color='#667eea')
+                ax.set_xlabel('Hour of Day')
+                ax.set_ylabel('Average Fraud Score')
+                ax.set_xticks(range(0, 24, 2))
+                ax.grid(True, alpha=0.3)
+                st.pyplot(fig)
+            else:
+                st.line_chart(hourly_risk, use_container_width=True)
 
 # Footer
 st.markdown("---")
