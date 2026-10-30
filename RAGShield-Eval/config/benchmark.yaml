@@ -1,0 +1,47 @@
+# RAGShield Eval — benchmark configuration
+# Everything that affects a model's output lives here so it can be hashed for reproducibility.
+
+benchmark:
+  name: RAGShield Eval
+  version: "1.0.0"
+  tasks_dir: tasks
+  notes: >
+    Single shared system policy across all tasks so that cross-task and cross-model
+    comparison is fair. Per-task policy variation is deliberately avoided.
+
+run:
+  # Models must be named exactly as the provider expects. See src/model_provider.py.
+  # Empty list = the offline pipeline-validation path (clearly labelled, never counted
+  # as a model experiment).
+  models: []
+  # models:
+  #   - provider: openai
+  #     model: gpt-4o-2024-11-20
+  #   - provider: anthropic
+  #     model: claude-sonnet-4-20250514
+  repetitions: 3
+  temperature: 0.0
+  max_output_tokens: 700
+  timeout_seconds: 60
+  max_retries: 2
+  retry_backoff_seconds: 2.0
+
+budget:
+  # Hard stop. The runner refuses to start a run whose worst-case estimate exceeds
+  # this value. Cost is an ESTIMATE from config pricing, never a billed figure.
+  max_total_cost_usd: 2.00
+  # Refuse to run live calls unless this is explicitly true.
+  allow_live_calls: false
+
+grading:
+  # Deterministic grader only in v1.0.0. No LLM-as-judge is used, so no judge
+  # agreement can be claimed. See SCORING_METHODOLOGY.md.
+  primary_grader: deterministic
+  llm_judge: disabled
+
+paths:
+  results_dir: results
+  raw_outputs: results/raw_outputs.jsonl
+  scores_csv: results/scores.csv
+  summary_json: results/summary.json
+  manifest: results/experiment_manifest.json

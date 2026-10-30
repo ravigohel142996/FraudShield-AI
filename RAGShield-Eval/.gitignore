@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+.venv/
+.env
+.pytest_cache/
+RAGShield-Eval-micro1-Submission.zip
+dist/
+*.zip

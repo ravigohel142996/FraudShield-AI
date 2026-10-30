@@ -2,6 +2,14 @@
 
 A production-grade fraud detection system that combines rule-based logic with machine learning to score transactions (0-100) and provide comprehensive explanations for fraud risk assessment.
 
+---
+
+> **Note (2026-10-30):** This repository also contains
+> **[`RAGShield-Eval/`](RAGShield-Eval/README.md)** — a separate, self-contained project
+> submitted to the **micro1 Eval Hackathon 2026**: a reproducible benchmark for indirect
+> prompt injection and retrieval authorisation in RAG systems. It shares no code with
+> FraudShield AI, which is unaffected. Start at `RAGShield-Eval/README.md`.
+
 ## 🎯 Problem Statement
 
 Financial institutions and payment processors need real-time fraud detection systems that can:

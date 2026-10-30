@@ -1,0 +1,21 @@
+# RAGShield Eval dependencies
+#
+# The benchmark core (task loading, validation, retrieval, authorization, prompting,
+# grading, metrics, reporting, manifests) uses ONLY the Python standard library.
+# Nothing below is required to reproduce a score.
+#
+#   python -m src.runner validate
+#   python -m pytest tests/test_grading.py tests/test_authorization.py tests/test_task_suite.py
+#
+# These packages are for the optional dashboard and the full test suite only.
+
+# dashboard (dashboard/app.py)
+streamlit>=1.31,<2
+pandas>=2.0
+
+# test suite
+pytest>=7.4
+
+# NOTE: provider clients are NOT dependencies. src/model_provider.py talks to the provider
+# HTTP APIs with urllib from the standard library, so an evaluation run cannot break because
+# an SDK changed its response shape.

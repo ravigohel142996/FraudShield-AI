@@ -1,0 +1,74 @@
+{
+  "benchmark": "RAGShield Eval",
+  "benchmark_version": "1.0.0",
+  "run_label": "pipeline-wiring-validation",
+  "created_utc": "2026-10-30T19:47:46+00:00",
+  "counts_as_model_experiment": false,
+  "environment": {
+    "python_version": "3.11.2",
+    "python_implementation": "CPython",
+    "platform": "Linux-6.1.158+-x86_64-with-glibc2.36",
+    "machine": "x86_64",
+    "git_commit": "e26545abe02380406d9caf4bb0660670b00d10ea",
+    "git_worktree_dirty": true
+  },
+  "policy": {
+    "policy_version": "1.0.0",
+    "policy_sha256": "8304b2d2b3d4837f6a9ca9489bf85fbb53fe49f69c0129afc1e1d536c26250d6"
+  },
+  "tasks": {
+    "count": 8,
+    "sha256_per_task": {
+      "T01": "90f6cdd724d43ff16ca40ce9ea85e720f706fbafd6df6c9eed5c0a730c05bfc0",
+      "T02": "85cc754dec11607a5ace10141f9c948c4fe329a73a12df0f343b823e25041c40",
+      "T03": "8ab30eddd57a1c24c89b57bb4b508c1617f4a3a34da603210fa83bc0f125264a",
+      "T04": "a65faeab68489f3205a31bb4005bfacb3ece2994cee29842a02d7a2e41b7e718",
+      "T05": "3aaa8eae7fccdeaaa7979b45562217baca7879d43f87bfbffbce95e214f21bc2",
+      "T06": "b0c2a065580ceb33d45115ca4d558d667aeba7bf2bbbd161c2aff42ec1f59a85",
+      "T07": "7c39fb216bd68949d74d7419fd396f1ec982bb169dc1414781348f4fb28a86bf",
+      "T08": "56e8e01f63cc236b42128382fbc003bd32a6eb4489c96cb206272c7986f67a8b"
+    }
+  },
+  "models": [
+    {
+      "provider": "stub",
+      "model": "offline-pipeline-validation-stub"
+    }
+  ],
+  "run_settings": {
+    "repetitions": 1,
+    "temperature": 0.0,
+    "max_output_tokens": 700,
+    "timeout_seconds": 60,
+    "max_retries": 2,
+    "budget_limit_usd": 2.0
+  },
+  "counts": {
+    "runs_total": 8,
+    "runs_scored": 0,
+    "runs_failed": 0
+  },
+  "cost": {
+    "estimated_total_usd": 0.0,
+    "label": "ESTIMATE from config/price table - not a billed amount"
+  },
+  "environment_note": "Python packages required by the core: none beyond the standard library. pytest is required only for the test suite; streamlit+pandas only for the dashboard.",
+  "provider_class": "pipeline_validation_stub",
+  "preflight_estimate": {
+    "models": [
+      {
+        "provider": "stub",
+        "model": "offline-pipeline-validation-stub",
+        "credential": "offline pipeline validation stub - not a model",
+        "available": true,
+        "estimated_input_tokens": 4935,
+        "estimated_output_tokens": 5600,
+        "estimated_cost_usd": null
+      }
+    ],
+    "estimated_total_cost_usd": 0.0,
+    "label": "ESTIMATE - not a billed amount",
+    "runs_planned": 8
+  },
+  "artefact_note": "Pipeline-validation artefacts. These are NOT model experiment results and must never be reported as such."
+}
